@@ -1,0 +1,30 @@
+# STM32CubeIDE build outputs
+Debug/
+Release/
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.su
+
+# STM32CubeIDE workspace/IDE metadata (opsional, biasanya tidak perlu di-share)
+.metadata/
+.settings/
+*.launch
+
+# CubeMX backup files
+*.ioc.bak
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Python (untuk script receive_audio.py)
+__pycache__/
+*.pyc
+venv/
+
+# Hasil rekaman audio (biasanya besar & berubah-ubah, opsional di-exclude)
+*.wav
