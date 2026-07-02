@@ -34,8 +34,16 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define HALF_BUFFER_SAMPLES   1600U                      /* ~96ms @ 16.666kHz, 16-bit mono */
+#define HALF_BUFFER_SAMPLES   1600U                      /* jumlah RAW WORD dari DMA per half (BUKAN otomatis = jumlah sample audio asli, lihat catatan di ExtractAndSendHalfBuffer) */
 #define FULL_BUFFER_SAMPLES   (HALF_BUFFER_SAMPLES * 2U)  /* total ping-pong buffer */
+
+/* HIPOTESIS yang sedang diuji: SAI1 dikonfigurasi "2 slot" (Stereo frame),
+ * artinya tiap frame WS mengirim 2 word DMA (slot Left & Right) meski mic
+ * cuma mono -- salah satu slot floating/garbage. ACTIVE_SLOT_OFFSET
+ * menentukan slot mana (index genap=0 atau ganjil=1) yang diambil sebagai
+ * audio asli. MULAI dari 0 -- kalau hasil rekaman masih noisy/malah lebih
+ * aneh, coba ganti ke 1. */
+#define ACTIVE_SLOT_OFFSET    0U
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -54,8 +62,9 @@
 static uint32_t audioBufferRaw[FULL_BUFFER_SAMPLES];
 
 /* Buffer hasil ekstraksi 16-bit MSB dari audioBufferRaw, yang akan dikirim
- * ke UART. Dipakai ulang (reuse) untuk half pertama maupun half kedua,
- * jadi cukup berukuran HALF_BUFFER_SAMPLES saja (bukan FULL). */
+ * ke UART. Dipakai ulang (reuse) untuk half pertama maupun half kedua.
+ * Ukuran tetap HALF_BUFFER_SAMPLES (lebih besar dari perlu setelah fix
+ * slot -- cukup aman, cuma dipakai sebagian: HALF_BUFFER_SAMPLES/2). */
 static uint16_t audioBuffer16[HALF_BUFFER_SAMPLES];
 
 /* Flag untuk menandai buffer mana yang siap diproses & dikirim.
@@ -249,15 +258,27 @@ static void SystemPower_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* ============================================================================
- * Fungsi bantu: ekstrak 16-bit MSB dari tiap sample 32-bit raw SAI,
+ * Fungsi bantu: ekstrak sample audio ASLI dari half-buffer raw SAI,
  * lalu kirim hasil ekstraksi (16-bit) ke USART1 via DMA.
  *
- * Kenapa >> 16: data INMP441 24-bit MSB-first ditempatkan di bit [31:8]
- * dari word 32-bit (bit [7:0] adalah padding nol). Mengambil 16 bit
- * TERATAS (bit [31:16]) memberi kita representasi 16-bit yang paling
- * signifikan dari data audio asli -- setara dengan "downsample" presisi
- * dari 24-bit ke 16-bit dengan cara membuang bit-bit paling tidak
- * signifikan (LSB), bukan memotong di posisi sembarang.
+ * FIX SLOT INTERLEAVING (sedang diuji): SAI1 dikonfigurasi "2 slot"
+ * (Stereo frame) meski mic mono -- tiap frame WS mengirim 2 raw word DMA
+ * (slot Left & Right berselang-seling), tapi cuma SATU slot yang berisi
+ * data mic yang valid (slot lainnya floating/garbage, karena L/R pin mic
+ * di-GND -> cuma salah satu slot yang "terisi" beneran). Kode SEBELUMNYA
+ * mengambil SETIAP raw word tanpa membedakan slot -- ini diduga jadi
+ * penyebab noise (separuh "sample" yang dikirim itu garbage, diselang-seling
+ * dengan audio asli).
+ *
+ * Fix: ambil HANYA 1 dari tiap 2 raw word (index genap/ganjil sesuai
+ * ACTIVE_SLOT_OFFSET), buang slot yang tidak aktif. Konsekuensi: jumlah
+ * sample audio ASLI yang dikirim per half-buffer jadi SETENGAH dari
+ * sizeInSamples (raw word count), yaitu HALF_BUFFER_SAMPLES/2 = 800 sample.
+ *
+ * Kenapa >> 16 (tetap sama seperti sebelumnya): data INMP441 24-bit
+ * MSB-first ditempatkan di bit [31:8] dari tiap word 32-bit (bit [7:0]
+ * padding nol). Ambil 16 bit teratas = representasi 16-bit paling
+ * signifikan dari data audio asli.
  *
  * Jika UART masih sibuk mengirim buffer sebelumnya, data ini akan
  * di-skip dan overrunCount bertambah.
@@ -271,16 +292,28 @@ static void ExtractAndSendHalfBuffer(uint32_t *rawData, uint16_t sizeInSamples)
         return;
     }
 
-    /* Ekstraksi: ambil 16-bit MSB dari tiap word 32-bit */
+    /* SEMENTARA DI-REVERT ke versi ambil SEMUA raw word (tanpa slot-skip),
+     * untuk uji ulang sekarang setelah VDD mic diperbaiki (pakai 3V3
+     * eksternal dari ESP32, bukan pin 3V3 STM32 yang bermasalah).
+     *
+     * Alasan revert: noise yang terlihat sebelumnya kemungkinan besar
+     * BUKAN dari slot interleaving (hipotesis "2 slot, Mono"), melainkan
+     * dari VDD yang tidak stabil. Fix slot-skip sebelumnya (ambil 1 dari
+     * tiap 2 raw word) kemungkinan JUSTRU membuang separuh sample asli
+     * yang valid -- ini konsisten dengan gejala "rekaman terdengar sangat
+     * dipercepat" (durasi WAV dianggap penuh tapi datanya cuma setengah).
+     *
+     * Kalau hasil tes ini BERSIH tanpa skip -- teori ini terkonfirmasi,
+     * dan versi INI (bukan versi slot-skip) yang dipakai seterusnya.
+     * Kalau MASIH noisy -- berarti slot-skip memang perlu, tapi root
+     * cause noise sebelumnya harus dipisah dulu dari masalah VDD supaya
+     * tidak mencampur dua variabel sekaligus. */
     for (uint16_t i = 0; i < sizeInSamples; i++)
     {
         audioBuffer16[i] = (uint16_t)(rawData[i] >> 16);
     }
 
     uartTxBusy = 1;
-    /* sizeInSamples * 2 karena tiap sample HASIL EKSTRAKSI 16-bit = 2 byte,
-     * dan HAL_UART_Transmit_DMA bekerja dalam satuan byte. Buffer yang
-     * dikirim adalah audioBuffer16 (hasil ekstraksi), BUKAN rawData. */
     if (HAL_UART_Transmit_DMA(&huart1, (uint8_t *)audioBuffer16, sizeInSamples * 2U) != HAL_OK)
     {
         uartTxBusy = 0;

@@ -1,0 +1,14 @@
+C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/cmath:345:3:constexpr float std::log10(float)	1
+C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/cmath:1156:3:constexpr bool std::isinf(double)	3
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:45:40:EI_IMPULSE_ERROR ei_run_impulse_check_canceled()	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:49:40:EI_IMPULSE_ERROR ei_sleep(int32_t)	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:54:32:uint64_t ei_read_timer_ms()	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:58:32:uint64_t ei_read_timer_us()	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:62:28:)	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:69:28:void ei_printf_float(float)	12
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:115:28:void ei_putchar(char)	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:121:29:void* ei_malloc(size_t)	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:125:29:void* ei_calloc(size_t, size_t)	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:129:28:void ei_free(void*)	1
+../Middlewares/Third_Party/EdgeImpulse_Yes-No_MachineLearning/edgeimpulse/edge-impulse-sdk/porting/stm32-cubeai/ei_classifier_porting.cpp:136:28:void DebugLog(const char*)	1
+C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/cmath:1074:5:constexpr typename __gnu_cxx::__promote_2<_Tp, _Up>::__type std::pow(_Tp, _Up) [with _Tp = double; _Up = int]	1

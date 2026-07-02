@@ -60,8 +60,8 @@ all: main-build
 main-build: MencobaUlang.elf secondary-outputs
 
 # Tool invocations
-MencobaUlang.elf MencobaUlang.map: $(OBJS) $(USER_OBJS) C:\Users\Greg\STM32CubeIDE\New_workspace\MencobaUlang\STM32U5A9NJHXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "MencobaUlang.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\Greg\STM32CubeIDE\New_workspace\MencobaUlang\STM32U5A9NJHXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="MencobaUlang.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+MencobaUlang.elf MencobaUlang.map: $(OBJS) $(USER_OBJS) C:\00_MAIN_STORAGE\Document\KP-LEN-ICDEC\01_audio_acquisition\STM32U5A9NJHXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "MencobaUlang.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\00_MAIN_STORAGE\Document\KP-LEN-ICDEC\01_audio_acquisition\STM32U5A9NJHXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="MencobaUlang.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
