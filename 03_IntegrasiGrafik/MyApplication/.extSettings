@@ -1,0 +1,8 @@
+[ProjectFiles]
+HeaderPath=../Drivers/BSP/STM32U5x9J-DK;../Drivers/BSP/Components/mx25um51245g;../Drivers/CMSIS/Device/ST/STM32U5xx/Include
+[Groups]
+Drivers/BSP/STM32U5x9J-DK=../Drivers/BSP/STM32U5x9J-DK/stm32u5x9j_discovery_bus.c;../Drivers/BSP/STM32U5x9J-DK/stm32u5x9j_discovery_ts.c;../Drivers/BSP/STM32U5x9J-DK/stm32u5x9j_discovery_hspi.c
+Drivers/BSP/Components=../Drivers/BSP/Components/aps512xx/aps512xx.c;../Drivers/BSP/Components/mx25um51245g/mx25um51245g.c;../Drivers/BSP/Components/sitronix/sitronix.c;../Drivers/BSP/Components/sitronix/sitronix_reg.c
+Application/User/TouchGFX/Target=../TouchGFX/Target/Buttons.cpp;../TouchGFX/Target/KeySampler.cpp;../TouchGFX/target/CortexMMCUInstrumentation.cpp
+[Others]
+Define = TX_LOW_POWER

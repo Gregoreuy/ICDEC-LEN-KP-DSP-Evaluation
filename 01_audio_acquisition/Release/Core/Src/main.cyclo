@@ -1,0 +1,8 @@
+../Core/Src/main.c:287:13:ExtractAndSendHalfBuffer.constprop	4
+../Core/Src/main.c:181:6:SystemClock_Config	4
+../Core/Src/main.c:100:5:main	5
+../Core/Src/main.c:329:6:HAL_SAI_RxHalfCpltCallback	2
+../Core/Src/main.c:344:6:HAL_SAI_RxCpltCallback	2
+../Core/Src/main.c:358:6:HAL_UART_TxCpltCallback	2
+../Core/Src/main.c:372:6:HAL_SAI_ErrorCallback	2
+../Core/Src/main.c:388:6:Error_Handler	1

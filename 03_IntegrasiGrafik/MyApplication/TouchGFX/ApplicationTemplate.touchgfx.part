@@ -1,0 +1,33 @@
+
+{
+  "Application": {
+    "Name": "STM32U5A9J-DK",
+    "TouchGfxPath": "../Middlewares/ST/touchgfx",
+    "AvailableColorDepths": [ 24 ],
+    "AvailableLCDs":
+    {
+      "24": "LCDGPU2D"
+    },
+    "AvailableResolutions": [
+      {
+        "Width": 480,
+        "Height": 480
+      }
+    ],
+    "PostGenerateTargetCommand": "touchgfx update_project",
+    "Family": "STM32U5",
+    "SubFamily": "STM32U599/5A9",
+    "Platform": "m33",
+    "Toolchain": "STM32CubeIDE",
+    "ProjectFile": "../STM32U5A9J-DK.ioc",
+    "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
+    "OptionalComponents": [
+      "GPU2D"
+    ],
+    "AdditionalFeatures": [
+      "GPU2DVector",
+      "VectorFonts"
+    ]
+  },
+  "Version": "4.26.1"
+}
